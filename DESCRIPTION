@@ -1,0 +1,19 @@
+Package: Zcalc
+Type: Package
+Title: One-step installation of MOSAIC Calculus packages
+Version: 0.1.0
+Author: Daniel Kaplan
+Maintainer: Daniel Kaplan <dtkaplan@gmail.com>
+Description: There are several special-purpose packages associated with the MOSAIC Calculus project: mosaic, mosaicCalc, Znotes, Zdata, Zsandbox, Zapps, mosaicCalc. This package allows them all to be installed or loaded at once.
+Imports:
+    mosaic,
+    mosaicCalc,
+    ggformula,
+    palmerpenguins,
+    learnr,
+    shiny,
+    Znotes
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1

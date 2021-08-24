@@ -11,7 +11,9 @@ Imports:
     ggformula,
     palmerpenguins,
     learnr,
-    shiny
+    shiny,
+    shinyjs, 
+    rsconnect
 Remotes:
     github::ProjectMOSAIC/mosaicCalc@beta
 License: MIT + file LICENSE

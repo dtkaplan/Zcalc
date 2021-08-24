@@ -1,8 +1,6 @@
 # Lightly modified from tidyverse package
 
-core <- c("mosaic", "mosaicCore", "mosaicData", "mosaicCalc", "Znotes")
-        # Add later:  "Zapps")
-
+core <- c("mosaic", "mosaicCore", "mosaicData", "mosaicCalc")
 
 core_unloaded <- function() {
   search <- paste0("package:", core)

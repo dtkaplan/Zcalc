@@ -7,20 +7,20 @@
 capture(cmd, message = "", digits = 4)
 }
 \arguments{
-\item{cmd}{An R expression, typically piped into `capture()`}
+\item{cmd}{An R expression, typically piped into \code{capture()}}
 
 \item{message}{a comment to print after the result of cmd.}
 }
 \description{
-In `{learnr}`, the results of running an exercise are posted below the code-entry
+In \code{{learnr}}, the results of running an exercise are posted below the code-entry
 box. When there are multiple commands, this breaks the direct link between the command
-itself and the printed results. `capture()` prints out both the command and the result
-along with an optional message. `annot()` turns a character string into a line
+itself and the printed results. \code{capture()} prints out both the command and the result
+along with an optional message. \code{annot()} turns a character string into a line
 that looks like a comment.
 }
 \details{
-You **must** use the built-in pipe (`|>`) into `capture()`. Use whatever
-you like to the left of `|>`.
+You \strong{must} use the built-in pipe (\verb{|>}) into \code{capture()}. Use whatever
+you like to the left of \verb{|>}.
 Meant for results that are very short vectors, either numeric or character string.
 }
 \examples{

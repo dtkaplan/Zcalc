@@ -6,10 +6,6 @@ runtime: shiny_prerendered
 
 ```{r setup, context="setup", include=FALSE}
 library(learnr)
-# library(mosaic)
-# library(mosaicCalc)
-# library(math141Z)
-# library(palmerpenguins)
 library(Zcalc)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.timelimit = 30)

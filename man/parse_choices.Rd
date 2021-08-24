@@ -3,17 +3,25 @@
 \name{parse_choices}
 \alias{parse_choices}
 \title{Accepted syntax
-Line starts with [a] or [+] means correct, with [a] meaning "keep order" and "+"
+Line starts with \link{a} or \link{+} means correct, with \link{a} meaning "keep order" and "+"
 meaning "randomize order" [] or [ ] or [-] means incorrect
 Next characters until open bracket are the choice text itself
-Optionally [feedback] {param=whatever, param2=whatever}}
+Optionally [feedback] {param=whatever, param2=whatever}
+
+[ ]: R:\%20
+[-]: R:-
+[feedback]: R:feedback}
 \usage{
 parse_choices(lines)
 }
 \description{
 Accepted syntax
-Line starts with [a] or [+] means correct, with [a] meaning "keep order" and "+"
+Line starts with \link{a} or \link{+} means correct, with \link{a} meaning "keep order" and "+"
 meaning "randomize order" [] or [ ] or [-] means incorrect
 Next characters until open bracket are the choice text itself
 Optionally [feedback] {param=whatever, param2=whatever}
+
+[ ]: R:\%20
+[-]: R:-
+[feedback]: R:feedback
 }

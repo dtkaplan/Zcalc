@@ -6,28 +6,29 @@
 \title{NASA data on planets}
 \format{
 A data frame with 10 rows and these variables:
-
-- `planet` name of the planet
-- `mass`  in  $10^{24}$ kg
-- `diameter` in  km
-- `density` in kg/m^3
-- `gravity`  in m/s^2
-- Escape velocity in km/s
-- Rotational  period in hours
-- `day_length` in  hours
-- `distance_from_sun` in $10^6$ km
-- `perihelion` in  $10^6$ km
-- `aphelion` in  $10^6$  km
-- `orbital_period` in days
-- `orbital_velocity`  in km/s
-- `orbital_inclination` in degrees
-- `orbital_eccentricity`
-- `obliquity_to_orbit` in  degrees
-- `mean_temperature` in C
-- `surface_pressure` in  bars
-- `n_moons` a count
-- `ring_system` does the planet have a ring system
-- `global_magnetic_field` does the planet have a magnetic field
+\itemize{
+\item \code{planet} name of the planet
+\item \code{mass}  in  $10^{24}$ kg
+\item \code{diameter} in  km
+\item \code{density} in kg/m^3
+\item \code{gravity}  in m/s^2
+\item Escape velocity in km/s
+\item Rotational  period in hours
+\item \code{day_length} in  hours
+\item \code{distance_from_sun} in $10^6$ km
+\item \code{perihelion} in  $10^6$ km
+\item \code{aphelion} in  $10^6$  km
+\item \code{orbital_period} in days
+\item \code{orbital_velocity}  in km/s
+\item \code{orbital_inclination} in degrees
+\item \code{orbital_eccentricity}
+\item \code{obliquity_to_orbit} in  degrees
+\item \code{mean_temperature} in C
+\item \code{surface_pressure} in  bars
+\item \code{n_moons} a count
+\item \code{ring_system} does the planet have a ring system
+\item \code{global_magnetic_field} does the planet have a magnetic field
+}
 }
 \source{
 https://nssdc.gsfc.nasa.gov/planetary/factsheet/

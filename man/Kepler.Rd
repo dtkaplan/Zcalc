@@ -6,24 +6,25 @@
 \title{Kepler's calculation of the position of Mars}
 \format{
 A data frame with 28 rows and these variables:
-
-- `time` - Interval in Earth days from 8:15am Greenwich
+\itemize{
+\item \code{time} - Interval in Earth days from 8:15am Greenwich
 time on 9 March 1584.
-- `kepler.radius` - The radius of the orbit in AU (astronomical units. 1 AU is 93 million miles)
-- `kepler.angle` - The "true anomoly" measured in radians
-- `actual.radius` - Modern calculation of the above
-- `actual.angle` - Modern calculation of the above
+\item \code{kepler.radius} - The radius of the orbit in AU (astronomical units. 1 AU is 93 million miles)
+\item \code{kepler.angle} - The "true anomoly" measured in radians
+\item \code{actual.radius} - Modern calculation of the above
+\item \code{actual.angle} - Modern calculation of the above
+}
 }
 \source{
 Drawn from  from McLaughlin, Michael P. ( 1999 ) "A Tutorial on
-[Mathematical Modelling"](http://www.causascientia.org/math_stat/Tutorial.pdf)
+\href{http://www.causascientia.org/math_stat/Tutorial.pdf}{Mathematical Modelling"}
 p. 21-23.
 }
 \usage{
 data(Kepler)
 }
 \description{
-Astronomer [Johannes Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler) (1571-1630) famously measured
+Astronomer \href{https://en.wikipedia.org/wiki/Johannes_Kepler}{Johannes Kepler} (1571-1630) famously measured
 the position of the planet Mars. His interpretation of this data
 led substantially to Newton's theory of universal gravity. This
 data frame gives Kepler's measurements as a function of time, together
@@ -46,7 +47,7 @@ angle of 0 is the position when Mars is closest to the Sun. An angle of 3.14 is
 when Mars is farthest from the Sun.
 }
 \references{
-See `https://faculty.uca.edu/saustin/3110/mars.pdf` for a useful
+See \verb{https://faculty.uca.edu/saustin/3110/mars.pdf} for a useful
 description of the estimation process.
 }
 \keyword{datasets}

@@ -6,19 +6,20 @@
 \title{Gas  and electricity usage by a home in St. Paul, MN}
 \format{
 A data.frame object with one row for each month
-
-- `month` - the month covered by the bill as a number
-- `day` - the terminating day of the bill
-- `year` - the year in which the month fell
-- `temp` -  average temperature over the entire  month
-- `kwh` - electricity usage in kilowatt-hours
-- `ccf` - natural gas usage in cubic feet
-- `thermsPerDay` - another measure of natural gas usage
-- `dur` - duration of the period covered by the bill, in days (typically about 30)
-- `totalbill` - dollar amount of the bill
-- `gasbill`: - dollar amount of the natural gas  part of the bill
-- `elecbill` - dollar amount of the electricity bill
-- `notes` - miscellaneous  comments on the month's bill or changes in the house
+\itemize{
+\item \code{month} - the month covered by the bill as a number
+\item \code{day} - the terminating day of the bill
+\item \code{year} - the year in which the month fell
+\item \code{temp} -  average temperature over the entire  month
+\item \code{kwh} - electricity usage in kilowatt-hours
+\item \code{ccf} - natural gas usage in cubic feet
+\item \code{thermsPerDay} - another measure of natural gas usage
+\item \code{dur} - duration of the period covered by the bill, in days (typically about 30)
+\item \code{totalbill} - dollar amount of the bill
+\item \code{gasbill}: - dollar amount of the natural gas  part of the bill
+\item \code{elecbill} - dollar amount of the electricity bill
+\item \code{notes} - miscellaneous  comments on the month's bill or changes in the house
+}
 }
 \source{
 Personal communication from the homeowner

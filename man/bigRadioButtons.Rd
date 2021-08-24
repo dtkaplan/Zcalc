@@ -10,7 +10,7 @@ bigRadioButtons(id, label, choices, origNum)
 bigRadioButtonItem(id, value, string)
 }
 \arguments{
-\item{id}{the same id given to `bigRadioButtons`}
+\item{id}{the same id given to \code{bigRadioButtons}}
 
 \item{label}{character string label}
 
@@ -21,7 +21,7 @@ bigRadioButtonItem(id, value, string)
 \item{value}{identifier for the individual radio button, typically, 1, 2, 3, ...
 for successive buttons.}
 
-\item{string}{the HTML string in the `<div>` for the button.}
+\item{string}{the HTML string in the \verb{<div>} for the button.}
 }
 \description{
 Creates a radio-button input for Shiny where the item labels are arbitrary

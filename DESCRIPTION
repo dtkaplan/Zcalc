@@ -11,11 +11,9 @@ Imports:
     ggformula,
     palmerpenguins,
     learnr,
-    shiny,
-    Znotes
+    shiny
 Remotes:
-    github::ProjectMOSAIC/mosaicCalc@beta,
-    github::dtkaplan/Znotes
+    github::ProjectMOSAIC/mosaicCalc@beta
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

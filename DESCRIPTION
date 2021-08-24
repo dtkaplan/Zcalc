@@ -14,7 +14,7 @@ Imports:
     shiny,
     Znotes
 Remotes:
-    github::ProjectMOSAIC/mosaicCalc@beta
+    github::ProjectMOSAIC/mosaicCalc@beta,
     github::dtkaplan/Znotes
 License: MIT + file LICENSE
 Encoding: UTF-8

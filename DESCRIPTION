@@ -7,7 +7,7 @@ Maintainer: Daniel Kaplan <dtkaplan@gmail.com>
 Description: There are several special-purpose packages associated with the MOSAIC Calculus project: mosaic, mosaicCalc, Znotes, Zdata, Zsandbox, Zapps, mosaicCalc. This package allows them all to be installed or loaded at once.
 Imports:
     mosaic,
-    mosaicCalc,
+    mosaicCalc (>= 0.5.3),
     ggformula,
     palmerpenguins,
     learnr,

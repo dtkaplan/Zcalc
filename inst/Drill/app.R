@@ -1,9 +1,9 @@
-library(shiny)
-library(dplyr)
-library(shinyjs)
-library(Zcalc)
-library(splines)
-library(digest)
+library(shiny, quietly=TRUE)
+library(dplyr, quietly=TRUE)
+library(shinyjs, quietly=TRUE)
+library(Zcalc, quietly=TRUE)
+library(splines, quietly=TRUE)
+library(digest, quietly=TRUE)
 
 # Success policy: 17 out of 20
 nright <- 8

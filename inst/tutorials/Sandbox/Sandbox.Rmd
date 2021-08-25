@@ -17,6 +17,10 @@ tutorial_options(exercise.timelimit = 30)
 session$onSessionEnded(function() {
         stopApp()
       })
+# trying to keep the app from greying out.
+observe({
+  invalidateLater(10000)
+  cat(".")   })
 ```
 
 ## SANDBOX

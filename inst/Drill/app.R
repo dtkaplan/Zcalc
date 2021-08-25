@@ -1,9 +1,9 @@
-library(shiny, quietly=TRUE)
-library(dplyr, quietly=TRUE)
-library(shinyjs, quietly=TRUE)
-library(Zcalc, quietly=TRUE)
-library(splines, quietly=TRUE)
-library(digest, quietly=TRUE)
+suppressPackageStartupMessages(library(shiny, quietly=TRUE))
+suppressPackageStartupMessages(library(dplyr, quietly=TRUE))
+suppressPackageStartupMessages(library(shinyjs, quietly=TRUE))
+suppressPackageStartupMessages(library(Zcalc, quietly=TRUE))
+suppressPackageStartupMessages(library(splines, quietly=TRUE))
+suppressPackageStartupMessages(library(digest, quietly=TRUE))
 
 # Success policy: 17 out of 20
 nright <- 8
@@ -273,6 +273,11 @@ server <- function(input, output, session) {
           filter(topic == input$topic_choice) %>% .$qname %>% sort()
 
         updateSelectInput(session, "instructor_choice", choices = the_choices)
+    })
+
+    # Close the app when the browser window is closed
+    session$onSessionEnded(function() {
+      stopApp()
     })
 }
 

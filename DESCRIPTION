@@ -13,7 +13,8 @@ Imports:
     learnr,
     shiny,
     shinyjs, 
-    rsconnect
+    rsconnect, 
+    MMAC
 Remotes:
     github::ProjectMOSAIC/mosaicCalc@beta
 License: MIT + file LICENSE

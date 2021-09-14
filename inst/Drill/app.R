@@ -36,7 +36,7 @@ Qbank <- try(readDrillfiles(source_files))
 if (inherits(Qbank, "try-error")) cat("Problem reading files")
 Qbank_topics <- unique(Qbank$Q$topic)
 
-# an experiment to see if I can get markdown to render as HTML.
+# kluge to get basic markdown to render as HTML.
 md2html <- function(s) {
     backtick <- "`([^`]*)`"
     doubledollar   <- "\\${2}([^\\$]+)\\${2}"
@@ -73,7 +73,8 @@ ui <- fluidPage(
             tags$hr(),
             textInput("passcode", "access code"),
             selectInput("instructor_choice", "Choose question:", choices=1:3),
-            textOutput("show_success_code")
+            textOutput("show_success_code"),
+            actionButton("refresh", "Reload question files")
         ),
 
         # Show a plot of the generated distribution
@@ -96,6 +97,18 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
+    Qs <- reactiveValues()
+
+    observeEvent(input$refresh, {
+      Qs$Qbank <- try(readDrillfiles(source_files))
+      if (inherits(Qbank, "try-error")) cat("Problem reading files")
+      Qs$Qbank_topics <- unique(Qs$Qbank$Q$topic)
+
+      updateSelectInput(session, "topic_choice", choices = sort(Qs$Qbank_topics) )
+    }, ignoreNULL = FALSE)
+
+
+
     State <- reactiveValues()
     this_question <- reactiveValues(valid = FALSE)
     feedback <- reactiveValues(message="")
@@ -107,9 +120,10 @@ server <- function(input, output, session) {
 
     shinyjs::hide("nextQ")
 
-    observeEvent(c(input$topic_choice, input$startover), {
+    observeEvent(c(input$topic_choice, input$startover, input$refresh), {
         # Get the unique IDs, in random order of the questions matching the topic
-        Questions <- Qbank$Q %>% dplyr::filter(topic == input$topic_choice)
+        req(Qs$Qbank) # if this exists, the other components of Qs also exist
+        Questions <- Qs$Qbank$Q %>% dplyr::filter(topic == input$topic_choice)
         State$next_q <- 0
         State$q_ids <- sample(Questions$unique)
         State$q_names <- sort(Questions$qname)
@@ -184,9 +198,10 @@ server <- function(input, output, session) {
     next_question <- reactive({
         input$nextQ # for the dependency
         input$topic_choice # ditto
+        req(Qs$Qbank)
         # Get the next item
         if (instructor_chooses()) {
-          selected_question <- Qbank$Q %>%
+          selected_question <- Qs$Qbank$Q %>%
             filter(topic == input$topic_choice, qname == input$instructor_choice) %>% .$unique
           req(selected_question)
         } else {
@@ -205,11 +220,11 @@ server <- function(input, output, session) {
         }
         # Fill in the next question
         this_question$valid <- TRUE
-        prompt_info <- Qbank$Q %>% filter(unique == selected_question)
+        prompt_info <- Qs$Qbank$Q %>% filter(unique == selected_question)
         this_question$name   <- prompt_info$qname
         this_question$prompt <- prompt_info$prompt %>% # handle backquotes
             md2html()
-        choices <- Qbank$C %>% filter(question == selected_question)
+        choices <- Qs$Qbank$C %>% filter(question == selected_question)
         this_question$choices <- choices$choice_text %>% md2html()
         this_question$correct <- which(choices$correct)
         this_question$feedback <- choices$feedback %>%
@@ -262,14 +277,17 @@ server <- function(input, output, session) {
         if (instructor_chooses()) {
           shinyjs::show("instructor_choice")
           shinyjs::show("show_success_code")
+          shinyjs::show("refresh")
         } else {
           shinyjs::hide("instructor_choice")
           shinyjs::hide("show_success_code")
+          shinyjs::hide("refresh")
         }
     })
 
-    observeEvent(input$topic_choice, {
-        the_choices <- Qbank$Q %>%
+    observeEvent(c(input$topic_choice, input$refresh), {
+        req(Qs$Qbank)
+        the_choices <- Qs$Qbank$Q %>%
           filter(topic == input$topic_choice) %>% .$qname %>% sort()
 
         updateSelectInput(session, "instructor_choice", choices = the_choices)

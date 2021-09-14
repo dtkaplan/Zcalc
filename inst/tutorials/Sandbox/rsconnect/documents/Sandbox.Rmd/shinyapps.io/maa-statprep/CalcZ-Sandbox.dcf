@@ -5,9 +5,9 @@ account: maa-statprep
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4270461
-bundleId: 4964357
+bundleId: 4997700
 url: https://maa-statprep.shinyapps.io/CalcZ-Sandbox/
-when: 1629922328.74502
-lastSyncTime: 1629922328.74504
+when: 1630689944.22307
+lastSyncTime: 1630689944.22309
 asMultiple: FALSE
 asStatic: FALSE

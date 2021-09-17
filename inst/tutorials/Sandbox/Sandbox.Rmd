@@ -7,7 +7,6 @@ runtime: shiny_prerendered
 ```{r setup, context="setup", include=FALSE}
 library(learnr)
 library(Zcalc)
-library(Znotes)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.timelimit = 30)
 ```

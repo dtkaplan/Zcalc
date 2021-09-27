@@ -108,7 +108,7 @@ server <- function(input, output, session) {
   fourth_state <- reactive({
     if (is.na(current_task()$fourth)) return(list(valid=TRUE))
     if (is.null(input$fourth)) return(list(valid=FALSE))
-    Zcald:::match_arg(current_task()$fourth, input$fourth)
+    Zcalc:::match_arg(current_task()$fourth, input$fourth)
   })
 
   answer_complete <- reactive({

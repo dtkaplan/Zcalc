@@ -1,0 +1,13 @@
+name: Sandbox
+title: Sandbox
+username:
+account: dtkaplan
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4755374
+bundleId: 5082960
+url: https://dtkaplan.shinyapps.io/Sandbox/
+when: 1632875494.56159
+lastSyncTime: 1632875494.5616
+asMultiple: FALSE
+asStatic: FALSE

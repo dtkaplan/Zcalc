@@ -144,7 +144,7 @@ A ***tilde expression*** is a special feature of R that let's you write down a m
 * `y^2 + 3*y ~ y`
     - *What it does* A tilde expression does ***not*** cause any computation to be done. It is simply a way of writing down a mathematical relationship for use later on.
     - *Vocabulary*
-        - The ***tilde*** is a character that's little used in English. It looks like <span style="font-size: 30pt;">~</span>. Most US keyboards place it in the upper-left key. 
+        - The ***tilde*** is a character little used in English. It looks like <span style="font-size: 30pt;">~</span>. Most US keyboards place it in the upper-left key. 
         - There are two R expressions involved, one on the ***left-hand side*** of the tilde, the other on the ... need we say it? ... ***right-hand side***. In the example, `y^2 + 3*y` is the left-hand side and plain, ordinary `y` is on the right-hand side.
         - In R/mosaic, The translation of tilde into English is any of the following: "[left] is a function of [right]", or "[left] versus [right]" or "[left] depends on [right]". 
     - *Notes*
@@ -181,11 +181,12 @@ A ***tilde expression*** is a special feature of R that let's you write down a m
 <details>
 <summary>Graphing functions with a single input</summary>
 
-* `slice_plot(exp(x) ~ x, domain(x=c(-3,3)))`
+* `slice_plot(exp(x) ~ x, domain(x = -3 : 3))`
     - *What it does* Draws a graph of the function $e^x$ with the horizontal axis running from $-3 \leq x \leq 3$.
     - *Vocabulary* 
         - The first argument is a ***tilde expression***. 
         - The second argument specifies the ***domain*** to use in the graph, that is, the extent of the horizontal axis. This will **always** be in the form shown above: applying the `domain()` function to a ***named argument***.
+        - A named argument consists of two parts: a name and an R expression. In the example, the name is `x` and the R expression is $-3 : 3$. That R expression means "from -3 to 3." The colon (`:`) is essential punctuation; it's what separates grammatically the lower end of the domain from the upper end. (For experienced R users: If you prefer to use the form `c(-3,3)` instead of the colon, that works. For specialized R programmers: The ordinary integer orientation of `:` is suspended within `domain()` so the limits you give will be treated exactly.) 
         - The plotting function is called `slice_plot()` because we think of a function of one input as a slice of a multivariable surface, but we won’t get into that immediately.
     - *Notes*
         - Used as shown above, there will be **three consecutive closing parentheses** at the end of the command.
@@ -209,7 +210,7 @@ A ***tilde expression*** is a special feature of R that let's you write down a m
 <summary>Drawing contour plots</summary>
 In *MOSAIC Calculus*, we generally use a contour-plot format to display graphically a function with two inputs. This is done in much the same way as `slice_plot()`.
 
-* `contour_plot(3 + 2*x - 4*y + 0.5*x*y ~ x & y, domain(x=c(-5, 5), y=c(0, 10)))`
+* `contour_plot(3 + 2*x - 4*y + 0.5*x*y ~ x & y, domain(x=-5 : 5), y=0 : 10))`
     - *What it does* Draws a contour plot on a domain with two dimensions.
     - *Vocabulary* Nothing here that you haven't seen in `slice_plot()`: tilde expression, domain, ...
     - *Notes*
@@ -265,20 +266,118 @@ Sometimes you may want to compare two or more functions in the same graphics fra
 
 </details>
 
-<hr>
 
 
-*The following are under construction*. You don't need them yet.
+
 <!---------------------------------->
 <details>
 <summary>Data frames</summary>
+Essentially all of the data we use in this course is arranged as ***data frames***. (This is also true in statistics and data science generally.) A data frame is a rectangular array. Each column is called a **variable**, each row is a *case*. For instance, in a data frame about people, each row might be an individual person. The different variables record different aspects of that person: height, age, sex, state of residence, etc. All of the entries within a column must be the same kind of thing: a number for height, a postal abbreviation for state, and so on. There are three kinds of things you will do with data frames:
+
+1. Look at them to orient yourself or browse. 
+2. Access a variable.
+3. **Wrangle** them, for example extracting a subset of cases or combining data from two different data frames. Data wrangling is an important skill, but it isn't the topic of this course. So when you need to wrangle data, we'll tell you how. 
+
+For this course, almost all data will be provided by giving you the name of dataframes. Sometimes this name will be simple and in the usual form, e.g. `EbolaAll`. Other time, the name will be preceded with information about where the computer should look for the data, e.g. `palmerpenguins::penguins`. 
+
+Some simple, helpful commands for orienting yourself to a data frame:
+- `names(EbolaAll)` tells you the names of the columns in the data frame.
+- `head(EbolaAll)` shows the first several rows.
+- `DT::datatable(EbolaAll)` will show the entire data frame interactively, allowing you to page through the data.
+- `help(EbolaAll)` displays documentation about the data frame.
+
+Once you know the basic facts of a data frame---what the variable names are and what kind of thing each variable records---you are ready to use the data in your work. Two common tasks are (1) to plot one variable versus another and (2) to use the variables in some calculation, such as fitting a model. Both tasks use much the same syntax based on ***tilde expressions***. 
+
+For instance: 
+
+1. to plot the number of Ebola cases in Guinea versus date: `gf_point(Gcases ~ Date, data = EbolaAll)`. (See the "plotting data" section of this document.) The variable names (`Gcases` and `Date`) are used in the tilde expression, while the name of the data frame is specified in other argument, the named argument `data=`.
+2. For model-fitting, see below.
 
 </details>
 
 <!---------------------------------->
 <details>
-<summary>Fitting functions to data</summary>
+<summary>Plotting data</summary>
+There is one type of data graphic that we will be using in this course: the ***point plot*** (also known as a "scatter plot"). There are, of course, many other kinds of statistical graphics such as density plots, jittered plots, etc. which you will learn about in a statistics course, but we will not use them here.
 
+A point plot always involves two variables from a data frame. To illustrate, consider the `palmerpenguins::penguins` data frame, where each case is a individual penguin.
+
+```{r echo=TRUE}
+DT::datatable(palmerpenguins::penguins)
+```
+
+Suppose we want to look at flipper length versus body mass. The appropriate command is:
+```{r echo=TRUE}
+gf_point(flipper_length_mm ~ body_mass_g, data = palmerpenguins::penguins)
+```
+Each row in the data frame generates one dot in the plot: the $y$ and $x$ coordinates of the dot are set by the value of the variables named in the tilde expression. $y$ is always the first name, on the left-hand side of the tilde.
+
+There is a wide variety of ways to customize the plot: size, shape, transparency of the dots, etc. A statistics course can show you why you would want to use these modalities. For our purposes in this course, there are just three sorts of customizations:
+
+1. Rather than a linear axis (the default), show the data using a log axis. The penguin data is not suitable for an example, because the linear axes work perfectly well. (All penguins are approximately the same size.) So, as an example, we'll use a very small data set from Robert Boyle's experiments around 1660 on the relationship bretween the pressure and volume of a gas (at constant temperature).
+
+```{r echo=TRUE}
+# linear axes: the default
+gf_point(pressure ~ volume, data = Boyle) 
+
+# Log-log axes
+gf_point(pressure ~ volume, data = Boyle) %>%
+  gf_refine(scale_x_log10(), scale_y_log10())
+```
+To make a semi-log plot, use the `scale_y_log10()` and leave out the `scale_x_log10()` argument to `gf_refine(0)`.
+
+Note: Log-log or semi-log axes are a valuable way to present data to a human reader, because the value of the variables for any point can be read directly from the axes. But sometimes your purpose is not to present data but to estimate a parameter in a power-law or exponential relationship. For the purpose of estimating parameters, better to make an ordinary plot with linear axes, but plot the log of the variable(s) rather than the variables themselves. For instance:
+
+`gf_point(log(pressure) ~ log(volume), data = Boyle)`
+
+2. Using color to display a third variable in a scatter plot. An example with the penguin data will suffice.
+
+```{r echo=TRUE}
+gf_point(flipper_length_mm ~ body_mass_g, 
+         data = palmerpenguins::penguins,
+         color = ~ sex)
+```
+Notice the tilde before the variable name in the `color=` argument. You can also set the color to be a fixed values, e.g. `color="magenta"`.
+
+3. Set the limits of an axis. Sometimes the upper and lower bounds on the axes selected by R are inappropriate for your purpose. When this is the case, you can set the limits yourself by piping the graphic to the `gf_lims()` function. For instance, the penguin graph above shows that females have somewhat smaller flipper length than males, and somewhat smaller weights as well. But because zero was not used as the lower limit of the axes, the plot overstates the sex differences. Including zero as an axis limit is often appropriate.
+
+```{r echo=TRUE}
+gf_point(flipper_length_mm ~ body_mass_g, 
+         data = palmerpenguins::penguins,
+         color = ~ sex) %>%
+  gf_lims(y=c(0,235), x=c(0,6500))
+
+```
+
+</details>
+
+
+
+
+<!---------------------------------->
+<details>
+<summary>Fitting functions to data</summary>
+Finding parameters to match a function to data can be a matter of trial and error. The `fitModel()` R/mosaic function can be used to polish a preliminary fit. 
+
+For instance, as every chemistry student knows, Boyle's Law states that at constant temperature, pressure and volume are inversely related: $P = a V^{-1}$. Let's see how well Boyle's data matches his law by fitting a general power-law form $P = a V^{n}$ to his data.
+
+At the core of `fitModel()` is a tilde expression that specifies the name of the function output (on the left side of the tilde) and a functional form written in terms of the names of the inputs to the function. Parameters are written using names. 
+
+```{r echo=TRUE}
+mod <- fitModel(pressure ~ a*volume^n, data = Boyle)
+```
+
+The object created by `fitModel()` is a function of the variables on the right-hand side of the tilde expression, just `volume` here. You can use that mathematical function like any other that you create with `makeFun()` or the like. For instance:
+```{r echo=TRUE}
+gf_point(pressure ~ volume, data = Boyle) %>%
+  slice_plot(mod(volume) ~ volume, color="magenta")
+```
+But unlike other functions, you can interrogate the functions produced by `fitModel(0)` to see the numerical values of the parameters. This is done with the `coef()` function (as in "coefficients").
+
+```{r echo=TRUE}
+coef(mod)
+```
+If Boyle had been able to measure and control the temperature in his experiments, he would have found that the parameter `a` is proportional to temperature.
 </details>
 
 
@@ -286,12 +385,48 @@ Sometimes you may want to compare two or more functions in the same graphics fra
 <!---------------------------------->
 <details>
 <summary>Default values for parameters in functions</summary>
+Suppose you were creating a function to represent the distance travelled by an object in free fall as a function of time from some initial point in time $t_0$. The mathematical relationship is $$\text{dist}(t) \equiv v_0 \left[\strut t - t_0\right] + \frac{1}{2} g \left[\strut t - t_0\right]^2$$
+
+To evaluate this function, you need to know the three parameters $v_0, t_0,$ and $g$. On Earth, $g=-9.8$ meters/sec$^2$, but you may not know $v_0$ or $t_0$ until it comes time to use the function in some context. It's tempting to put in numerical values for the parameters to make the function easy to use. For instance, if the object starts from rest at time $t=0$, it would be tempting to make the R definition something like:
+
+`dist <- makeFun(0*(t-0) - 9.8*(t-0)^2 / 2 ~ t)` or even `makeFun(-9.8*t^2 / 2 ~ t)`
+
+A better practice is to create the function with the parameter names shown explicitly:
+
+`dist <- makeFun(v0 * (t - t0) + g*(t-t0)^2/2 ~ t)`
+
+Unfortunately, the resulting function will have four arguments which have to be specified every time you use it. A nice compromise is to assign ***default values*** for the parameters. For instance $t_0 = 0$ and $v_0 = 0$ and $g = -9.8$ meters/sec$^2$ would be sensible. 
+
+You specify the default parameters by adding them as additional arguments after the tilde expression.
+
+```{r echo=TRUE}
+dist <- makeFun(v0*(t-t0) + g*(t-t0)^2 / 2 ~ t, g=-9.8, v0=0, t0=0)
+```
+
+This way, you can use the function simply when the default parameters are appropriate, or modify them as needed. For instance, the free-fall distance over two seconds:
+
+```{r echo=TRUE}
+on_Earth <- dist(2)
+on_Mars  <- dist(2, g=-3.7)
+```
+
 
 </details>
 
 <!---------------------------------->
 <details>
 <summary>Calculating derivatives</summary>
+"Calculating a derivative" means to find the function that is the derivative of a specified function. In R/mosaic this can be done in exactly the same way that `makeFun()` works. For instance:
+```{r echo=TRUE}
+df <- D(exp(t) * cos(t) ~ t)
+df
+slice_plot(df(t) ~ t, domain(t=0:10))
+```
+
+The name on the right-hand side of the tilde expression will be the "with respect to" variable. If you want a second derivative, use and expression like `t + t` on the right-hand side. You can also calculate mixed partial derivatives with right-hand side expressions like `t & x`.
+
+R/mosaic knows how to use both numerical and symbolic methods. To force the use of numerical methods, use `numD()` instead of `D()`.
+
 
 </details>
 
@@ -299,19 +434,100 @@ Sometimes you may want to compare two or more functions in the same graphics fra
 <details>
 <summary>Calculating anti-derivatives</summary>
 
+Anti-derivatives can be computed with `antiD()`. For example:
+
+```{r echo=TRUE}
+antiD(sin(omega*t) ~ t)
+```
+R/mosaic knows only a few symbolic anti-derivatives. When it doesn't know the symbolic form, the function produced by `antiD()` will use numerical methods.
+
 </details>
 
 <!---------------------------------->
 <details>
 <summary>Solving (zero-finding)</summary>
+"Solving" means to find an input $x^\star$ that will generate an output of $v$ from $f(x)$. That is, the answer $x^\star$ will give $f(x^\star) = v$. There may be no solutions, one solutions, several or many solutions. 
 
+In R/mosaic, solving is implemented as the `Zeros()` function. `Zeros()` looks for solutions where $f(x^\star) = 0$, but any solution problem, regardless of $v$, can be placed in this form. 
+
+`Zeros()` is used in the same way as many other R/mosaic functions: the first argument is a tilde expression, the second is a domain. The output will be a data-frame with the solutions found.  For instance, here we find the inputs to $\sin(x)$ that produce an output of 0.5. Notice that we have created a new function ($\sin(x) - 0.5$) whose output will be zero at the solutions we seek. 
+
+```{r echo=TRUE}
+solutions <- Zeros(sin(x) - 0.5 ~ x, domain(x=0:10))
+slice_plot(sin(x) ~ x, domain(x=0:10)) %>%
+  gf_point(0.5 ~ x, data = solutions)
+solutions
+```
 </details>
 <!---------------------------------->
 <details>
-<summary>Optimization</summary>
+<summary>Optimization (with derivatives)</summary>
 
+In optimization, you have an objective function $f(x)$ and you seek the argmin(s) or argmax(es). The textbook introduces optimization using a technique involving differentiating and solving, that is, finding $x^\star$ such that $\partial_x f(x^\star) = 0$. We'll illustrate with a made-up function:
+
+```{r echo=TRUE}
+f <- rfun(~ x, seed=943) # a random function
+slice_plot(f(x) ~ x, domain(x=-5:5))
+```           
+It's so easy to spot the argmins and argmaxes from a graph that it's reasonable to wonder why we need derivatives and solving to do it. The answer is that we are helping you establish a conceptual foundation for more interesting optimization problems where you can't just look at a graph. So let's step through the problem formally using derivatives.
+
+1. Construct the derivative of the objective function with respect to its argument.
+```{r echo=TRUE}
+df <- D(f(x) ~ x)
+```
+If there were symbolic parameters in your definition of $f()$, you would need to resolve them at this point, assigning the parameters definite numerical values.
+2. Find the zeros of the derivative function:
+```{r echo=TRUE}
+dzeros <- Zeros(df(x) ~ x, domain(x=-5:5))
+dzeros
+```
+The output of `Zeros()` has two columns. The first lists the solutions, the second gives the value of the function at those solutions. Note that the function output is very close to zero, there's not really any information there. And there's nothing that tells you whether a given $x$ is an argmax or an argmin. Of course, you could figure this out by referring to the graph of $f(x)$ itself, but let's be a little more formal by extracting this information from `dzeros`, `f()`, and the second derivative of `f()`. To do this, we introduce a new function, `mutate()`, that operates on data frames. And we'll need the second derivative $\partial_{xx}f()$ to establish whether the function is concave up or down at the solutions found.
+```{r echo=TRUE}
+ddf <- D(f(x) ~ x & x)
+```
+
+Here's where `mutate()` comes in, allowing us to apply the functions `f()` and `ddf()` to the `x` values in the solution. The first command might look strange. It means, "Take the old data frame `dzeros`, add some new columns to it using `mutate()`, and then calling the new data frame by the old name `dzeros`.
+
+```{r echo=TRUE}
+dzeros <- dzeros %>%
+  mutate(val = f(x), convexity = sign(ddf(x)))
+dzeros
+```
+From the sign of the convexity at the solutions $x$, you can tell immediately which rows correspond to an argmin (positive convexity) and which to an argmax (negative convexity).
+
+For fun, we can graph our findings on top of the function $f()$ to confirm that we have things right:
+
+```{r echo=TRUE}
+slice_plot(f(x) ~ x, domain(x=-5:5)) %>%
+  gf_point(val ~ x, data = dzeros, color= ~ convexity)
+```
+</details>
+
+<details>
+<summary>Optimization (generally)</summary>
+
+Optimization is such an important procedure that clever algorithms to handle all sorts of difficulties has been invented. This is an extensive topic in its own right, but for simplicity, R/mosaic provides a function `argM()` that works with functions with multiple inputs, pretty much automatically. It's called `argM()` because it returns both argmins and argmaxes, along with some supplemental information.
+
+```{r echo=TRUE}
+argM(f(x) ~ x, domain(x=-5:5))
+```
+`argM()` will not necessarily find **all** the local argmins and argmaxes. But it also works for functions with multiple inputs.
+
+
+```{r echo=TRUE}
+f2 <- makeFun(x*sin(sqrt(3+x))*(1+cos(y))-y ~ x & y)
+solns <- argM(f2(x, y) ~ x & y, domain(x=c(-3,3), y=c(-3,3)))
+solns
+```
+
+```{r echo=TRUE}
+contour_plot(f2(x,y) ~ x & y, domain(x=c(-3,3), y=c(-3,3))) %>%
+  gf_point(y ~ x, data = solns, color="red")
+```
 </details>
 <!---------------------------------->
+<hr>
+Still under development
 <details>
 <summary>Matrices</summary>
 

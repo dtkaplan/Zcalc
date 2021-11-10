@@ -16,7 +16,7 @@ dom <- list(t=c(0,60))
 slope_raw <- rfun2(6528, -2, 4) # degrees
 
 #' @export
-rover.grade <- function(t) slope_raw(t) - cos(1.5*t)*slope_raw(t)
+rover.incline <- function(t) slope_raw(t) - cos(1.5*t)*slope_raw(t)
 
 
 dt_heading <- rfun2(354, min = -6, max=6)

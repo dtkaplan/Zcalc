@@ -22,7 +22,7 @@ rover.incline <- function(t) slope_raw(t) - cos(1.5*t)*slope_raw(t)
 dt_heading <- rfun2(354, min = -6, max=6)
 heading_raw <- mosaicCalc::antiD(dt_heading(t) ~ t, lower.bound = 70)
 #' @export
-rover.heading <- function(t) heading_raw(t) + 10*rover.grade(t)*sin(t*rover.grade(t)/20)
+rover.heading <- function(t) heading_raw(t) + 10*rover.incline(t)*sin(t*rover.incline(t)/20)
 
 # Another approach to traffic penalty
 penalty_raw <- rfun2(94, -70, 30)
@@ -34,10 +34,10 @@ penalty <- function(t) {
 speedr1 <- rfun2(932, 63, 75)
 
 #' @export
-rover.speed <-  function(t) {(pnorm(58-t))*pnorm(t-2) * (speedr1(t) + penalty(t) - rover.grade(t) - 7)/12}
+rover.speed <-  function(t) {(pnorm(58-t))*pnorm(t-2) * (speedr1(t) + penalty(t) - rover.incline(t) - 7)/12}
 
 #' @export
 rover.current <- function(t) {
-  1/(0.030 - 0.0005  * (50-(rover.speed(t)+ 2*rover.grade(t))))
+  1/(0.030 - 0.0005  * (50-(rover.speed(t)+ 2*rover.incline(t))))
 }
 

@@ -4,7 +4,7 @@
 \alias{box_set}
 \title{Evenly spaced samples across a one- or two-dim domain}
 \usage{
-box_set(tilde = NULL, domain, n = 10, sum = FALSE)
+box_set(tilde = NULL, domain, n = 10, sum = FALSE, dx = NULL)
 }
 \arguments{
 \item{tilde}{A tilde expression specifying the function to be evaluated on the domain.}
@@ -17,6 +17,17 @@ specifying the coordinates of a polygon defining the area.}
 be a vector of length 2 giving different numbers for the x and for the y directions.}
 
 \item{sum}{If \code{TRUE} carry out the integral and return the numerical result.}
+
+\item{dx}{An alternative way of specifying the box size directly. Same
+for all dimensions.}
+}
+\value{
+By default, a data frame listing the location of the samples,
+the \code{.output.} value of the given function at those samples, the spatial
+extent of the samples (that is, dx for one-dimension or dx and dy for two dimensions. There
+is also a \code{dA} giving the dx or dx*dy depending on the dimension). If \code{sum=TRUE},
+then returns the sum of \code{.output * dA}, that is, the estimate of the integral of
+the function over the domain.
 }
 \description{
 This function breaks up a domain in 1- or 2- dimensions into evenly
@@ -30,9 +41,9 @@ box_set(x*y ~ x & y, domain(x=0:1, y=0:1), n = 4)
 box_set((x-.5)^2 ~ x, domain(x=0:1), n=100, sum=TRUE)
 # a polygon
 poly <- tibble(x = c(1:9, 8:1), y = c(1, 2*(5:3), 2, -1, 17, 9, 8, 2:9))
-boxes <- box_set(1 ~ x & y, poly)
-gf_polygon(y ~ x, data = poly) \%>\%
-  gf_rectangle((y - dy/3) + (y + dy/3) ~ (x - dx/3) + (x + dx/3),
+boxes <- box_set(1 ~ x & y, poly, dx = 1)
+gf_polygon(y ~ x, data = poly, color="blue", fill="blue", alpha=0.2) \%>\%
+  gf_rect((y - dy/3) + (y + dy/3) ~ (x - dx/3) + (x + dx/3),
   data = boxes)
 # area inside polygon
 box_set(1 ~ x & y, poly, n=100)

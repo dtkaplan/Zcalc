@@ -6,6 +6,6 @@
 #' * `nliving` traces a hypothetical population of 100,000 people through the mortality at each age.
 #' * `died` for the hypothetical population the number of people at that age who
 #' survived to the age and then died at that age.
-#'
+#' Source: <https://www.ssa.gov/oact/HistEst/PerLifeTables/2017/PerLifeTables2017.html>
 #'
 "M2014F"

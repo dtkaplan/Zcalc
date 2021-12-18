@@ -3,7 +3,7 @@
 \docType{data}
 \name{M2014F}
 \alias{M2014F}
-\title{Mortality versus age in the US in 2014}
+\title{Mortality versus age for females in the US in 2014}
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 120 rows and 5 columns.
 }
@@ -19,6 +19,7 @@ These data are from the US Social Security Administration.
 \item \code{nliving} traces a hypothetical population of 100,000 people through the mortality at each age.
 \item \code{died} for the hypothetical population the number of people at that age who
 survived to the age and then died at that age.
+Source: \url{https://www.ssa.gov/oact/HistEst/PerLifeTables/2017/PerLifeTables2017.html}
 }
 }
 \keyword{datasets}

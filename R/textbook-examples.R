@@ -15,5 +15,5 @@ SM_3_potential <- function(x1,y1,x2,y2,x3,y3) {
   L34sq <- (x3 - 3.2)^2 + (y3 + 1.1)^2 - 0.5
   gravity <- (y1 + y2 + y3)
 
-  L01sq + L12sq + L23sq + L34sq + gravity
+  0.8*(L01sq + L12sq + L23sq + L34sq)  + 2*gravity
 }

@@ -90,7 +90,7 @@ fourier_M <- function(x, n, fperiod = NULL) {
   M
 }
 
-#' @rdname basis_set
+#' @rdname basis_sets
 #' @export
 
 ns_M <- splines::ns

@@ -6,6 +6,7 @@
 \alias{legendre_M}
 \alias{ns_set}
 \alias{fourier_M}
+\alias{ns_M}
 \alias{fourier_set}
 \title{Basis sets for for function approximation}
 \usage{
@@ -16,6 +17,8 @@ legendre_M(x, df, left = -1, right = 1)
 ns_set(df = 3, left = -1, right = 1)
 
 fourier_M(x, n, fperiod = NULL)
+
+ns_M(x, df = NULL, knots = NULL, intercept = FALSE, Boundary.knots = range(x))
 
 fourier_set(df, left = -1, right = 1)
 }

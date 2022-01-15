@@ -36,44 +36,34 @@ NULL
 #' @rdname vectors
 #' @export
 `%onto%` <- function(b, A) {
-  .check_A_b(A, b)
+  b <- matrix(b, ncol=1) # force a column vector
+  if (!is.matrix(A))
+    A <- matrix(A, nrow=nrow(b))
+  else if (nrow(A) != nrow(b))
+    stop("<A> must have same number of rows as <b>.")
   A %*% qr.solve(A, b)
 }
 #' @rdname vectors
 #' @export
 `%perp%` <- function(b, A) {
-  .check_A_b(A, b)
+  b <- matrix(b, ncol=1) # force a column vector
   b - (b %onto% A)
 }
 #' @rdname vectors
 #' @export
 normalize <- function(A) {
-  .check_A_b(A)
+  if (!inherits(A, "matrix"))
+    stop("Argument <A> must be a matrix.")
   helper <- function(v) { v / sqrt(sum(v^2)) }
   apply(A, 2, helper)
 }
 #' @rdname vectors
 #' @export
 as_magnitude <- function(A, method=c("2", "O", "I", "F", "M")) {
-  .check_A_b(A)
+  if (!inherits(A, "matrix"))
+    stop("Argument <A> must be a matrix.")
   method <- match.arg(method)
   helper <- function(v) {Matrix::norm(v, type=method)}
 
   apply(A, 2, helper)
-}
-
-#' helper function
-#' @keywords internal
-.check_A_b <- function(A, b) {
-  if (!inherits(A, "matrix"))
-    stop("Argument <A> must be a matrix.")
-  if (!missing(v)) {
-    if (!inherits(b, "matrix"))
-      stop("Argument <b> must be a column vector.")
-    if (nrow(b) != nrow(A))
-      stop("Matrix A and vector b must have the same number of rows.")
-    A %*% qr.solve(A, b)
-  }
-
-  return(TRUE)
 }

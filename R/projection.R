@@ -18,20 +18,13 @@ NULL
 #'
 #' @rdname vectors
 #' @export
-`%dot%` <- function(u, A) {
-  if (!inherits(u, "matrix")) {
-    u <- matrix(u, nrow=1)
-  }
-  if (inherits(A, "matrix")) {
-    if (nrow(A) != nrow(u))
-      stop("Matrix A must have the right number of rows to match vector u.")
-  } else {
-    if (length(A) != ncol(u))
-      stop("A and u must have the same number of elements.")
-    A <- matrix(A, ncol=1)
-  }
+`%dot%` <- function(u, b) {
+  u <- matrix(u, nrow=1) # force u to row vector
+  b <- matrix(b, ncol=1)
+  if (nrow(b) != ncol(u))
+    stop("Vector <u> must have the same number of elements as vector <b>.")
 
-  u %*% A
+  c(u %*% b)
 }
 #' @rdname vectors
 #' @export

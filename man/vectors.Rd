@@ -9,7 +9,7 @@
 \alias{as_magnitude}
 \title{Utilities for vector calculations}
 \usage{
-u \%dot\% A
+u \%dot\% b
 
 b \%onto\% A
 
@@ -22,9 +22,9 @@ as_magnitude(A, method = c("2", "O", "I", "F", "M"))
 \arguments{
 \item{u}{a row vector, but a column vector is acceptable too}
 
-\item{A}{a matrix}
-
 \item{b}{a column vector}
+
+\item{A}{a matrix}
 
 \item{v}{like \code{u}}
 }

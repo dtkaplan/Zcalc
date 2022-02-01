@@ -14,11 +14,11 @@
 #' @rdname dynmodels
 #'
 #' @export
-dt_rabbit <- function(r, f, alpha=0.66, beta=1.33) {
+dt_rabbit <- function(r, f, alpha=2/3, beta=4/3) {
   alpha*r - beta*r*f
 }
 #' @rdname dynmodels
 #' @export
-dt_fox <- function(r, f, delta=-1, beta=1) {
-  delta*r - gamma*r*f
+dt_fox <- function(r, f, delta=1, gamma=1) {
+  -delta*f + gamma*r*f
 }

@@ -8,7 +8,7 @@
 \usage{
 dt_rabbit(r, f, alpha = 0.66, beta = 1.33)
 
-dt_fox(r, f, delta = -1, beta = 1)
+dt_fox(r, f, delta = -1, gamma = 1)
 }
 \arguments{
 \item{r, }{f, V, ... state variables.}

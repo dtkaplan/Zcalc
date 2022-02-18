@@ -17,6 +17,7 @@ Vowel_ee
 \itemize{
 \item \code{Oh_sound} and \code{Ee_sound} contain the complete utterances.
 \item \code{Vowel_ee} and \code{Vowel_oh} are snippets of about 0.04 seconds.
+\item \code{A_pitch} (https://upload.wikimedia.org/wikipedia/commons/5/50/Sine_wave_440.ogg)
 }
 }
 \keyword{datasets}

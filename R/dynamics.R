@@ -4,7 +4,12 @@
 #' - `flow_field()` draws arrows showing the flow at a grid of points
 #'
 #' @param ... The first arguments should describe the dynamics. See details.
-#'
+#' @param npts The number of points on an edge of the grid
+#' @param dt Time step for integrating the streamlines.
+#' @param nsteps How many steps to take for each streamline. Together with `dt`
+#' this determines the length of the streamline.
+#' @param color What color to use
+#' @param alpha What alpha to use
 #'
 #' @param first Ignore this. It is a stub to handle piping a graphics
 #' layer into the function call.
@@ -28,11 +33,12 @@
 #'
 #' @examples
 #' streamlines(dx ~ x+y, dy~ x-y, domain=domain(x=0:6, y=0:3), npts=20, dt=0.01, alpha=.6, color="blue")
+#' flow_field(dx ~ x+y, dy~ x-y, domain=domain(x=0:6, y=0:3), npts=20, scale=1)
 #' @rdname dynamics
 #' @export
-streamlines <- function(first, ..., domain=NULL, npts=4, dt=0.1, nsteps=10, color="black", alpha=1) {
+streamlines <- function(first, ..., domain=NULL, npts=4, dt=0.01, nsteps=10, color="black", alpha=1) {
   if (is.null(domain)) stop("must specify domain=")
-  dyn <- parse_dynamics(enquo(!!first), ..., req_initials=FALSE)
+  dyn <- parse_dynamics(first, ..., req_initials=FALSE)
   dyn_fun <- dyn$dyn_fun
   dom <- domain
   if (length(dom) != 2) stop("domain must have two variables")
@@ -68,20 +74,22 @@ streamlines <- function(first, ..., domain=NULL, npts=4, dt=0.1, nsteps=10, colo
     filter(row_number() == n())
 
   P <- dyn$gg
-  if (length(P) <- 2) P <- NULL # no gg object was piped in
+  if (length(P) < 2) P <- NULL # no gg object was piped in
   P %>% ggformula::gf_path(y ~ x, data = Paths,
                      lineend = "round",
-                     group = ~ group, color=color, alpha=alpha, size= ~size) %>%
+                     group = ~ group, color=color, alpha=alpha, size= ~size, inherit=FALSE) %>%
     #ggformula::gf_point(y ~ x, data = Last, shape=23, fill="black", inherit=FALSE) %>%
     ggformula::gf_labs(x = names(domain)[1], y = names(domain)[2]) %>%
     gf_refine(scale_alpha_identity(),
               scale_size_identity())
 }
+#' @param scale Number indicating how long to draw arrows. By default,
+#' the longest arrows take up a full box in the grid
 #' @rdname dynamics
 #' @export
-flow_field <- function(first, ..., domain=NULL, npts=4, scale=1, color="black", alpha=1) {
+flow_field <- function(first, ..., domain=NULL, npts=4, scale=0.8, color="black", alpha=1) {
   if (is.null(domain)) stop("must specify domain=")
-  dyn <- parse_dynamics(enquo(!!first),..., req_initials=FALSE)
+  dyn <- parse_dynamics(first,..., req_initials=FALSE)
   dom <- domain
   if (length(dom) != 2) stop("domain must have two variables")
   xpts <- seq(min(dom[[1]]), max(dom[[1]]), length = npts)
@@ -94,14 +102,15 @@ flow_field <- function(first, ..., domain=NULL, npts=4, scale=1, color="black", 
   dy <- diff(ypts[1:2])
   # add two columns to grid
   grid <- cbind(grid, grid)
-  xstep <- scale*steps[,1]*dx/step_lengths/2
-  ystep <- scale*steps[,2]*dy/step_lengths/2
+  scale <- scale / max(step_lengths)
+  xstep <- scale*steps[,1]*dx
+  ystep <- scale*steps[,2]*dy
   grid[,1] <- grid[,1] - xstep
   grid[,2] <- grid[,2] - ystep
   grid[,3] <- grid[,3] + xstep
   grid[,4] <- grid[,4] + ystep
 
-  res <- as.data.frame(grid)
+  res <- as.data.frame(na.omit(grid))
   names(res) <- c("x", "y", "xend", "yend")
 
   P <- dyn$gg
@@ -109,19 +118,28 @@ flow_field <- function(first, ..., domain=NULL, npts=4, scale=1, color="black", 
   P %>%
     gf_segment(y + yend ~ x + xend, data=res,
              color=color, alpha=alpha,
-             arrow = arrow(ends="last", type="closed", length=unit(1, "mm")))
+             arrow = arrow(ends="last", type="closed", length=unit(1, "mm")),
+             inherit=FALSE)
 }
 #'
 #' @export
 parse_dynamics <- function(first, ..., req_initials=TRUE) {
   # Grab all arguments, unevalued
   # <first> is to make sure there is an argument to pipe into
-  args <- c(first, enquos(...))
+  res <- list()
+  res$gg <- if (inherits(first, "gg")) first
+  else NA
+
+  if (inherits(first, "formula")) {
+    args <- c(first, enquos(...))
+  } else {
+    args <- enquos(...)
+  }
   argnames <- names(args)
   if (length(args) == 0)
     stop("No arguments describing dynamics given.")
 
-  res <- list()
+
   f_names <- c()
   f_vars  <- c()
   dyn_args <- c()
@@ -130,11 +148,7 @@ parse_dynamics <- function(first, ..., req_initials=TRUE) {
 
   # see if the first one is a ggplot object
   first <- eval(rlang::get_expr(args[[1]]))
-  res$gg <- if (inherits(first, "gg")) {
-    args <- args[-1]
-    argnames <- argnames[-1]
-    first
-  } else NA
+
 
   # sort out which ones are dynamics formula style and which are
   # initial conditions

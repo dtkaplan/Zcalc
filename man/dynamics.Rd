@@ -10,7 +10,7 @@ streamlines(
   ...,
   domain = NULL,
   npts = 4,
-  dt = 0.1,
+  dt = 0.01,
   nsteps = 10,
   color = "black",
   alpha = 1
@@ -21,7 +21,7 @@ flow_field(
   ...,
   domain = NULL,
   npts = 4,
-  scale = 1,
+  scale = 0.8,
   color = "black",
   alpha = 1
 )
@@ -31,6 +31,20 @@ flow_field(
 layer into the function call.}
 
 \item{...}{The first arguments should describe the dynamics. See details.}
+
+\item{npts}{The number of points on an edge of the grid}
+
+\item{dt}{Time step for integrating the streamlines.}
+
+\item{nsteps}{How many steps to take for each streamline. Together with \code{dt}
+this determines the length of the streamline.}
+
+\item{color}{What color to use}
+
+\item{alpha}{What alpha to use}
+
+\item{scale}{Number indicating how long to draw arrows. By default,
+the longest arrows take up a full box in the grid}
 }
 \description{
 \itemize{
@@ -54,4 +68,8 @@ if given, a ggplot object piped in. The new graphics layer will be drawn on
 top of that. If there is no ggplot object piped in, then the graphics
 will be made as a first layer, which can optionally piped into other
 ggformula functions or \code{+} into ggplot layers.
+}
+\examples{
+streamlines(dx ~ x+y, dy~ x-y, domain=domain(x=0:6, y=0:3), npts=20, dt=0.01, alpha=.6, color="blue")
+flow_field(dx ~ x+y, dy~ x-y, domain=domain(x=0:6, y=0:3), npts=20, scale=1)
 }

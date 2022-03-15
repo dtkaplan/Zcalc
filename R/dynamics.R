@@ -2,6 +2,7 @@
 #'
 #' - `streamlines()` draws raindrop-shaped paths at a randomized grid of points that follow trajectories
 #' - `flow_field()` draws arrows showing the flow at a grid of points
+#' - `trajectory_euler()` compute an Euler solution.
 #'
 #' @param ... The first arguments should describe the dynamics. See details.
 #' @param npts The number of points on an edge of the grid
@@ -175,7 +176,7 @@ parse_dynamics <- function(first, ..., req_initials=TRUE) {
   # check names of formulas to be sure they appear in the list
   # of variables
   # strip out leading "d"
-  f_names <- gsub("^d(.{1})", "\\1", f_names )
+  res$state_names <- f_names <- gsub("^d(.{1})", "\\1", f_names )
   matches <- f_names %in% f_vars
   if (!all(matches)) stop("LHS for each formula needs to be one of the variables on the RHS.")
   # any of the parameters that match f_names are really an initial condition
@@ -202,17 +203,65 @@ parse_dynamics <- function(first, ..., req_initials=TRUE) {
                   FUN=function(ex)
                     deparse(rlang::f_rhs(
                       rlang::get_expr(ex)))) %>% unlist()
-  res$inside <- paste("c(",
+  inside <- paste("c(",
                       paste(component_expressions, collapse=", "),
                       ")")
   res$params <- params
   res$initials <- initials
 
-  res$body <- paste("{", param_assign, split_vec, res$inside, "}")
+  body <- paste("{", param_assign, split_vec, inside, "}")
 
   res$dyn_fun <- function(vec){}
-  body(res$dyn_fun) <- parse(text = res$body)
+  body(res$dyn_fun) <- parse(text = body)
 
 
   res
+}
+#' @param dt time step (e.g. 0.01)
+#' @param nsteps how many Euler steps to take
+#' @param full report the derivative and the step size for each variable
+#' @param every n, report will contain every nth step
+#' @rdname dynamics
+#' @examples
+#' trajectory_euler(drabbit ~ 0.2*rabbit - 0.01*rabbit*fox, dfox ~ -.2*fox + 0.0005*rabbit*fox, rabbit=100, fox=3, dt=0.1, nsteps=500, every=10)
+#'
+#' @export
+trajectory_euler <- function(first, ...,
+                             dt=0.01, nsteps=4, full=TRUE, every=1) {
+  nsteps <- nsteps + 1 # Don't treat initial condition as a step
+  dyn <- parse_dynamics(first, ..., req_initials=FALSE)
+  dyn_fun <- dyn$dyn_fun
+  Step <- DState <- State <- matrix(0, ncol=length(dyn$state_names), nrow=nsteps)
+  colnames(State) <- dyn$state_names
+  colnames(DState) <- paste0("dt_", dyn$state_names)
+  colnames(Step) <- paste0("step_", dyn$state_names)
+  if (is.null(dyn$initials)) stop("Must specify initial conditions")
+  State[1,] <- dyn$initials
+  for (k in 1:nsteps) {
+    DState[k,] <- dyn_fun(State[k,])
+    Step[k,] <- dt*DState[k,]
+    if (k < nsteps) State[k+1,] <- State[k,] + Step[k,]
+  }
+
+  time <- tibble::tibble(t = dt*seq(0, nsteps-1))
+
+  # trim the output if required.
+  skip <- every - 1
+  if (skip > 0) {
+    if (skip != round(skip))
+              stop("skip= must be a positive integer.")
+    keepers <- seq(1, nsteps-1, by=skip+1L)
+    time <- time[keepers,]
+    State <- State[keepers,]
+    DState <- DState[keepers,]
+    Step <- Step[keepers, ]
+  }
+
+  # return(State)
+  Res <- bind_cols(time, as.data.frame(State))
+
+  if (full) Res <- bind_cols(Res,
+                             as.data.frame(DState),
+                             as.data.frame(Step))
+  Res
 }

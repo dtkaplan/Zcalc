@@ -11,7 +11,7 @@
 #' linear algebra block we are not teaching statistics, but the mathematical
 #' pre-requisites to understanding statistics.
 #'
-#' Specifically for *MOSAIC Calculus*, we have added this `varbind()` function.
+#' Specifically for *MOSAIC Calculus*, we have added this `df2matrix()` function.
 #' It serves much the same purpose as `cbind()`, that is, collecting vectors into a
 #' matrix. But is has two additional features:
 #'
@@ -30,17 +30,18 @@
 #' @details `1` is a good form in which to write the intercept term.
 #'
 #' @examples
-#' A <- varbind(1, disp, log(hp), sin(cyl)*sqrt(hp), data = mtcars)
-#' x <- qr.solve(A, mtcars$mpg)
+#' A <- df2matrix(1, disp, log(hp), sin(cyl)*sqrt(hp), data = mtcars)
+#' b <- df2matrix(mpg, data = mtcars)
+#' x <- qr.solve(A, b)
 #' f <- makeFun(x)
 #' f(hp=3, disp=2, cyl=4)
 #'
 #' @export
-varbind <- function(..., data=NULL) {
+df2matrix <- function(..., data=NULL) {
   columns <- enquos(...)
 
   column_names <- as.character(columns) %>% gsub("^\\~", "", .)
-  M <- lapply(columns, FUN = function(x) eval(get_expr(x), envir=data))
+  M <- lapply(columns, FUN = function(x) eval(rlang::get_expr(x), envir=data))
   M <- do.call(cbind, M)
   colnames(M) <- column_names
 
@@ -52,6 +53,10 @@ varbind <- function(..., data=NULL) {
 #' @export
 makeFun.numeric <- function(object, ...){
   namedx <- object
+  if (inherits(namedx, "matrix") && dim(namedx)[2]==1) {
+    namedx <- as.numeric(object)
+    names(namedx) <- rownames(object)
+  }
   # check if namedx is named. If not bawk.
   if (length(names(namedx)) < length(namedx))
     stop("Input to makeFun.numeric() must be a named numerical vector.")

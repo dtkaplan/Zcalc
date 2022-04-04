@@ -3,6 +3,7 @@
 \name{streamlines}
 \alias{streamlines}
 \alias{flow_field}
+\alias{trajectory_euler}
 \title{Dynamical systems calculations and graphics}
 \usage{
 streamlines(
@@ -25,6 +26,8 @@ flow_field(
   color = "black",
   alpha = 1
 )
+
+trajectory_euler(first, ..., dt = 0.01, nsteps = 4, full = TRUE, every = 1)
 }
 \arguments{
 \item{first}{Ignore this. It is a stub to handle piping a graphics
@@ -34,10 +37,9 @@ layer into the function call.}
 
 \item{npts}{The number of points on an edge of the grid}
 
-\item{dt}{Time step for integrating the streamlines.}
+\item{dt}{time step (e.g. 0.01)}
 
-\item{nsteps}{How many steps to take for each streamline. Together with \code{dt}
-this determines the length of the streamline.}
+\item{nsteps}{how many Euler steps to take}
 
 \item{color}{What color to use}
 
@@ -45,11 +47,16 @@ this determines the length of the streamline.}
 
 \item{scale}{Number indicating how long to draw arrows. By default,
 the longest arrows take up a full box in the grid}
+
+\item{full}{report the derivative and the step size for each variable}
+
+\item{every}{n, report will contain every nth step}
 }
 \description{
 \itemize{
 \item \code{streamlines()} draws raindrop-shaped paths at a randomized grid of points that follow trajectories
 \item \code{flow_field()} draws arrows showing the flow at a grid of points
+\item \code{trajectory_euler()} compute an Euler solution.
 }
 }
 \details{
@@ -72,4 +79,6 @@ ggformula functions or \code{+} into ggplot layers.
 \examples{
 streamlines(dx ~ x+y, dy~ x-y, domain=domain(x=0:6, y=0:3), npts=20, dt=0.01, alpha=.6, color="blue")
 flow_field(dx ~ x+y, dy~ x-y, domain=domain(x=0:6, y=0:3), npts=20, scale=1)
+trajectory_euler(drabbit ~ 0.2*rabbit - 0.01*rabbit*fox, dfox ~ -.2*fox + 0.0005*rabbit*fox, rabbit=100, fox=3, dt=0.1, nsteps=500, every=10)
+
 }

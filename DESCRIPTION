@@ -5,14 +5,15 @@ Version: 0.2.0
 Author: Daniel Kaplan
 Maintainer: Daniel Kaplan <dtkaplan@gmail.com>
 Description: There are several special-purpose packages associated with the MOSAIC Calculus project: mosaic, mosaicCalc, Znotes, Zdata, Zsandbox, Zapps, mosaicCalc. This package allows them all to be installed or loaded at once.
+Requires:
+    mosaicCalc (>= 0.5.6),
+    rlang (>= 1.0.1)
 Imports:
     mosaic,
     mosaicCore,
-    mosaicCalc (>= 0.5.4),
     ggformula,
     palmerpenguins,
     learnr,
-    rlang,
     shiny,
     shinyjs, 
     rsconnect, 
